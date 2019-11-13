@@ -26,14 +26,20 @@
 			const int iXmax = value; 
 			const int iYmax = value;
 			
+            //criacao de um ponteiro para um um array de 3 dimensoes
 			unsigned char ***array = (unsigned char***) malloc(iYmax*sizeof(unsigned char**));
-
+            
+            //alocacao dinamica dos arrays de ponteiros internos
+            //podemos observar as duas primeiras dimensoes como um array de ponteiros
+            //e a ultima dimensao como um array comum
 			for (int i = 0; i < iYmax; i++) 
 			{
 			// Assign to array[i], not *array[i] (that would dereference an uninitialized pointer)
+                //alocado da segunda dimensao de ponteiros
 				array[i] = (unsigned char**) malloc (iXmax*sizeof(unsigned char*));
 				for (int j = 0; j < iXmax; j++) 
 				{
+                    //alocacao do array de tres dimensoes
 					array[i][j] = (unsigned char*) malloc (3*sizeof(unsigned char));
 				}
 			}
