@@ -75,11 +75,12 @@
 			/*write ASCII header to the file*/
 			fprintf(fp,"P6\n %s\n %d\n %d\n %d\n",comment,iXmax,iYmax,MaxColorComponentValue);
 			/* compute and write image data bytes to the file*/
-			#pragma omp parallel for shared (array) private (Cy, iY, iX, Cx, Zx, Zy, Zx2, Zy2, Iteration) schedule(static, 4)
+			#pragma omp parallel for shared (array) private (Cy, iY, iX, Cx, Zx, Zy, Zx2, Zy2, Iteration) schedule(dynamic)
 			for(iY=0;iY<iYmax;iY++)
 			{
 				 Cy=CyMin + iY*PixelHeight;
 				 if (fabs(Cy)< PixelHeight/2) Cy=0.0; /* Main antenna */
+				 #pragma omp parallel for shared (array, Cy, iY) private (iX, Cx, Zx, Zy, Zx2, Zy2, Iteration) schedule(dynamic)
 				 for(iX=0;iX<iXmax;iX++)
 				 {         
 							Cx=CxMin + iX*PixelWidth;
