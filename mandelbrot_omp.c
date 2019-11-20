@@ -37,22 +37,8 @@ int main(int argc, char *argv[])
 		log = fopen(log_path, "a");
 
 		//criacao de um ponteiro para um um array de 3 dimensoes
-		unsigned char ***color = (unsigned char ***)malloc(iYmax * sizeof(unsigned char **));
-
-		//alocacao dinamica dos arrays de ponteiros internos
-		//podemos observar as duas primeiras dimensoes como um array de ponteiros
-		//e a ultima dimensao como um array comum
-		for (int i = 0; i < iYmax; i++)
-		{
-			// Assign to array[i], not *array[i] (that would dereference an uninitialized pointer)
-			//alocado da segunda dimensao de ponteiros
-			color[i] = (unsigned char **)malloc(iXmax * sizeof(unsigned char *));
-			for (int j = 0; j < iXmax; j++)
-			{
-				//alocacao do array de tres dimensoes
-				color[i][j] = (unsigned char *)malloc(3 * sizeof(unsigned char));
-			}
-		}
+		unsigned char *color = (unsigned char*) malloc(iXmax * iXmax * 3* sizeof(unsigned char));
+		
 
 		double *CyVec = (double *)malloc(iYmax * sizeof(double));
 		double *CxVec = (double *)malloc(iXmax * sizeof(double));
@@ -126,25 +112,28 @@ int main(int argc, char *argv[])
 				//unsigned char *aux1 = color +(iYmax*iXmax)+(iXmax*iX); //calcula endereco base
 				if (Iteration == IterationMax)
 				{ /*  interior of Mandelbrot set = black */
-					color[iY][iX][0] = 0;
-					color[iY][iX][1] = 0;
-					color[iY][iX][2] = 0;
+					*(color +(iYmax*iXmax*0)+(iY*iYmax) + iX)=0;
+					*(color +(iYmax*iXmax*1)+(iY*iYmax) + iX)=0;
+				 	*(color +(iYmax*iXmax*2)+(iY*iYmax) + iX)=0;
 				}
 				else
 				{ /* exterior of Mandelbrot set = white */
-					color[iY][iX][0] = 255;
-					color[iY][iX][1] = 255;
-					color[iY][iX][2] = 255;
+					*(color +(iYmax*iXmax*0)+(iY*iYmax) + iX)=255;
+					*(color +(iYmax*iXmax*1)+(iY*iYmax) + iX)=255;
+					*(color +(iYmax*iXmax*2)+(iY*iYmax) + iX)=255;
 				};
 			}
 		end = clock();
 		cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 		fprintf(log, "%s, %d, %f\n", CODIGO, iYmax, cpu_time_used);
 		fclose(log);
+		
 		//impessao do aquivo
 		for (iY = 0; iY < iYmax; iY++)
 			for (iX = 0; iX < iXmax; iX++)
-				fwrite(color[iY][iX], 1, 3, fp);
+				for(int m=0; m < 3; m++)
+					fwrite(color+(iYmax*iXmax*m)+(iY*iYmax)+iX, 1, 1, fp);
+
 		fclose(fp);
 	}
 
