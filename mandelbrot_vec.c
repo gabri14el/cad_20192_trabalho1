@@ -13,10 +13,10 @@
  * Modificador por gabri14el em 13/11/2019
   */
 
-//  #pragma GCC optimize("O3","unroll-loops","omit-frame-pointer","inline") //Optimization flags
-//  #pragma GCC option("arch=native","tune=native","no-zero-upper") //Enable AVX
-//  #pragma GCC target("avx")  //Enable AVX
-//  #include <x86intrin.h> //AVX/SSE Extensions
+#pragma GCC optimize("O3","unroll-loops","omit-frame-pointer","inline") //Optimization flags
+#pragma GCC option("arch=native","tune=native","no-zero-upper") //Enable AVX
+#pragma GCC target("avx2")  //Enable AVX
+ #include <x86intrin.h> //AVX/SSE Extensions
  #include <stdio.h>
  #include <stdlib.h>
  #include <math.h>
@@ -33,6 +33,8 @@
 			
             //criacao de um ponteiro para um um array de 3 dimensoes
 			unsigned char ***array = (unsigned char***) malloc(iYmax*sizeof(unsigned char**));
+			double * CyVec = (double *) malloc (iYmax*sizeof(double));
+			double * CxVec = (double *) malloc (iXmax*sizeof(double));
             
             //alocacao dinamica dos arrays de ponteiros internos
             //podemos observar as duas primeiras dimensoes como um array de ponteiros
@@ -51,7 +53,7 @@
 
 
 			/* world ( double) coordinate = parameter plane*/
-			double Cx,Cy;
+			//double Cx,Cy;
 			const double CxMin=-2.5;
 			const double CxMax=1.5;
 			const double CyMin=-2.0;
@@ -79,45 +81,54 @@
 			fp= fopen(filename,"wb"); /* b -  binary mode */
 			/*write ASCII header to the file*/
 			fprintf(fp,"P6\n %s\n %d\n %d\n %d\n",comment,iXmax,iYmax,MaxColorComponentValue);
+			
 			/* compute and write image data bytes to the file*/
+			// computa cx e cy 
 			for(iY=0;iY<iYmax;iY++)
-			{
-				 Cy=CyMin + iY*PixelHeight;
-				 if (fabs(Cy)< PixelHeight/2) Cy=0.0; /* Main antenna */
-				 for(iX=0;iX<iXmax;iX++)
-				 {         
-							Cx=CxMin + iX*PixelWidth;
-							/* initial value of orbit = critical point Z= 0 */
-							Zx=0.0;
-							Zy=0.0;
-							Zx2=Zx*Zx;
-							Zy2=Zy*Zy;
-							/* */
-							for (Iteration=0;Iteration<IterationMax && ((Zx2+Zy2)<ER2);Iteration++)
-							{
-								Zy=2*Zx*Zy + Cy;
-								Zx=Zx2-Zy2 +Cx;
+			{	double aux = CyMin + iY*PixelHeight;
+				double cx = CxMin + iY*PixelWidth;
+				if (fabs(aux)< PixelHeight/2) aux=0.0;
+				CyVec[iY] = aux;
+				CxVec[iY] = cx;
+			}
+
+			for(iY=0;iY<iYmax;iY++)
+				for(iX=0;iX<iXmax;iX++)
+					{         
+								double Cy = CyVec[iY];
+								double Cx = CxVec[iX];
+								
+								/* initial value of orbit = critical point Z= 0 */
+								Zx=0.0;
+								Zy=0.0;
 								Zx2=Zx*Zx;
 								Zy2=Zy*Zy;
-							};
-							/* compute  pixel color (24 bit = 3 bytes) */
-							//unsigned char *aux1 = color +(iYmax*iXmax)+(iXmax*iX); //calcula endereco base 
-							if (Iteration==IterationMax)
-							{ /*  interior of Mandelbrot set = black */
-								array[iY][iX][0]=0;
-								array[iY][iX][1]=0;
-								array[iY][iX][2]=0;            
-							}
-							else 
-							{ /* exterior of Mandelbrot set = white */
-								array[iY][iX][0]=255;
-								array[iY][iX][1]=255;
-								array[iY][iX][2]=255;  
-							};
-							
-					}
-			}
-		
+								/* */
+								for (Iteration=0;Iteration<IterationMax && ((Zx2+Zy2)<ER2);Iteration++)
+								{
+									Zy=2*Zx*Zy + Cy;
+									Zx=Zx2-Zy2 +Cx;
+									Zx2=Zx*Zx;
+									Zy2=Zy*Zy;
+								};
+								
+								/* compute  pixel color (24 bit = 3 bytes) */
+								//unsigned char *aux1 = color +(iYmax*iXmax)+(iXmax*iX); //calcula endereco base 
+								if (Iteration==IterationMax)
+								{ /*  interior of Mandelbrot set = black */
+									array[iY][iX][0]=0;
+									array[iY][iX][1]=0;
+									array[iY][iX][2]=0;            
+								}
+								else 
+								{ /* exterior of Mandelbrot set = white */
+									array[iY][iX][0]=255;
+									array[iY][iX][1]=255;
+									array[iY][iX][2]=255;  
+								};
+								
+						}
+			
 		//impessao do aquivo
 		for(iY=0;iY<iYmax;iY++)
 				for(iX=0;iX<iXmax;iX++)
