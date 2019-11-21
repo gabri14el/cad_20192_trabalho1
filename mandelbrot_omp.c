@@ -17,6 +17,7 @@
 #include <math.h>
 #include <omp.h>
 #include <time.h>
+#include <inttypes.h>
 #define CODIGO "omp"
 int main(int argc, char *argv[])
 {
@@ -26,8 +27,8 @@ int main(int argc, char *argv[])
 		int value = atoi(argv[1]);
 		/* screen ( integer) coordinate */
 		int iX, iY;
-		const int iXmax = value;
-		const int iYmax = value;
+		const  int iXmax =  value;
+		const  int iYmax =  value;
 
 		//tempo
 		clock_t start, end;
@@ -37,7 +38,8 @@ int main(int argc, char *argv[])
 		log = fopen(log_path, "a");
 
 		//criacao de um ponteiro para um um array de 3 dimensoes
-		unsigned char *color = (unsigned char*) malloc(iXmax * iXmax * 3* sizeof(unsigned char));
+		unsigned long int size = (unsigned long int) ( (unsigned long int)iXmax * (unsigned long int)iXmax * (unsigned long int) 3);
+		unsigned char *color = (unsigned char*) malloc(size);
 		
 
 		double *CyVec = (double *)malloc(iYmax * sizeof(double));

@@ -35,14 +35,8 @@ int main(int argc, char *argv[])
 		const char *log_path = argv[2];
 		log = fopen(log_path, "a");
 
-		//criacao de um ponteiro para um um array de 3 dimensoes
-		unsigned char ***array = (unsigned char ***)malloc(iYmax * sizeof(unsigned char **));
-
-		//alocacao dinamica dos arrays de ponteiros internos
-		//podemos observar as duas primeiras dimensoes como um array de ponteiros
-		//e a ultima dimensao como um array comum
-
-		unsigned char *color = (unsigned char*) malloc(iXmax * iXmax * 3* sizeof(unsigned char));
+		unsigned long int size = (unsigned long int) ( (unsigned long int)iXmax * (unsigned long int)iXmax * (unsigned long int) 3);
+        unsigned char *color = (unsigned char*) malloc(size);
 		double *CyVec = (double *)malloc(iYmax * sizeof(double));
 		double *CxVec = (double *)malloc(iXmax * sizeof(double));
 
