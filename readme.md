@@ -1,4 +1,4 @@
-#Códigos referentes ao primeiro trabalho da disciplina Computação de Alto Desempenho, semestre 2019.2.
+# Códigos referentes ao primeiro trabalho da disciplina Computação de Alto Desempenho, semestre 2019.2.
 O final do código (mandelbrot_*) refere ao tipo de melhoramento nele implementado. 
 - omp: openmp
 - omp_vec: openmp e vetorizacao simd (com otimizacao o3 do gcc)
