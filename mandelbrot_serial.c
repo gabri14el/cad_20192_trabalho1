@@ -35,8 +35,8 @@ int main(int argc, char *argv[])
 		const char *log_path = argv[2];
 		log = fopen(log_path, "a");
 
-		unsigned long int size = (unsigned long int) ( (unsigned long int)iXmax * (unsigned long int)iXmax * (unsigned long int) 3);
-        unsigned char *color = (unsigned char*) malloc(size);
+		unsigned long int size = (unsigned long int)((unsigned long int)iXmax * (unsigned long int)iXmax * (unsigned long int)3);
+		unsigned char *color = (unsigned char *)malloc(size);
 		double *CyVec = (double *)malloc(iYmax * sizeof(double));
 		double *CxVec = (double *)malloc(iXmax * sizeof(double));
 
@@ -104,29 +104,45 @@ int main(int argc, char *argv[])
 
 				/* compute  pixel color (24 bit = 3 bytes) */
 				//unsigned char *aux1 = color +(iYmax*iXmax)+(iXmax*iX); //calcula endereco base
+				unsigned long int aux;
+				unsigned long int parcela = (unsigned long int)((unsigned long int)iY * (unsigned long int)iYmax) + (unsigned long int)iX;
+				//unsigned long int parcela = (unsigned long int) (iY*iYmax) + iX;
 				if (Iteration == IterationMax)
 				{ /*  interior of Mandelbrot set = black */
-					*(color +(iYmax*iXmax*0)+(iY*iYmax) + iX)=0;
-					*(color +(iYmax*iXmax*1)+(iY*iYmax) + iX)=0;
-				 	*(color +(iYmax*iXmax*2)+(iY*iYmax) + iX)=0;
+					aux = ((unsigned long int)iYmax * (unsigned long int)iXmax * (unsigned long int)0) + (unsigned long int)parcela;
+					*(color + aux) = 0;
+					aux = ((unsigned long int)iYmax * (unsigned long int)iXmax * (unsigned long int)1) + (unsigned long int)parcela;
+					*(color + aux) = 0;
+					aux = ((unsigned long int)iYmax * (unsigned long int)iXmax * (unsigned long int)2) + (unsigned long int)parcela;
+					*(color + aux) = 0;
 				}
 				else
 				{ /* exterior of Mandelbrot set = white */
-					*(color +(iYmax*iXmax*0)+(iY*iYmax) + iX)=255;
-					*(color +(iYmax*iXmax*1)+(iY*iYmax) + iX)=255;
-					*(color +(iYmax*iXmax*2)+(iY*iYmax) + iX)=255;
+					aux = ((unsigned long int)iYmax * (unsigned long int)iXmax * (unsigned long int)0) + (unsigned long int)parcela;
+					*(color + aux) = 255;
+					aux = ((unsigned long int)iYmax * (unsigned long int)iXmax * (unsigned long int)1) + (unsigned long int)parcela;
+					*(color + aux) = 255;
+					aux = ((unsigned long int)iYmax * (unsigned long int)iXmax * (unsigned long int)2) + (unsigned long int)parcela;
+					*(color + aux) = 255;
 				};
 			}
 		end = clock();
 		cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-		fprintf(log, "%s, %d, %f\n", CODIGO, iYmax, cpu_time_used);
+		fprintf(log, "%s,%d,%f\n", CODIGO, iYmax, cpu_time_used);
 		fclose(log);
 
 		//impessao do aquivo
+		unsigned long int aux2;
 		for (iY = 0; iY < iYmax; iY++)
 			for (iX = 0; iX < iXmax; iX++)
-				for(int m=0; m < 3; m++)
-					fwrite(color+(iYmax*iXmax*m)+(iY*iYmax)+iX, 1, 1, fp);
+			{
+				unsigned long int parcela = (unsigned long int)((unsigned long int)iY * (unsigned long int)iYmax) + (unsigned long int)iX;
+				for (int m = 0; m < 3; m++)
+				{
+					aux2 = ((unsigned long int)iYmax * (unsigned long int)iXmax * (unsigned long int)m) + (unsigned long int)parcela;
+					fwrite(color + aux2, 1, 1, fp);
+				}
+			}
 		fclose(fp);
 	}
 
