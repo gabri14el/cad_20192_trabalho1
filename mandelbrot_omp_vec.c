@@ -21,6 +21,7 @@
 #include <math.h>
 #include <omp.h>
 #include <time.h>
+#include <sys/time.h>
 #define CODIGO "omp_vec"
 
 int main(int argc, char *argv[])
@@ -37,6 +38,8 @@ int main(int argc, char *argv[])
         //tempo
         clock_t start, end;
         double cpu_time_used;
+		struct timeval exec_t1, exec_t2;
+		double exec_time;
         FILE *log;
         const char *log_path = argv[2];
         log = fopen(log_path, "a");
@@ -80,6 +83,7 @@ int main(int argc, char *argv[])
         /* compute and write image data bytes to the file*/
 
         start = clock();
+        gettimeofday(&exec_t1, NULL);
 #pragma omp parallel for simd shared(CyVec, CxVec) schedule(dynamic)
         for (iY = 0; iY < iYmax; iY++)
         {
@@ -136,9 +140,11 @@ int main(int argc, char *argv[])
                 };
             }
 
-        end = clock();
-        cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-        fprintf(log, "%s,%d,%f\n", CODIGO, iYmax, cpu_time_used);
+        gettimeofday(&exec_t2, NULL);
+		exec_time = (double) (exec_t2.tv_usec - exec_t1.tv_usec) / 1000000 + (double) (exec_t2.tv_sec - exec_t1.tv_sec);
+		end = clock();
+		cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+		fprintf(log, "%s,%d,%f,%f\n", CODIGO, iYmax, cpu_time_used, exec_time);
         fclose(log);
         //impessao do aquivo
         unsigned long int aux2;
