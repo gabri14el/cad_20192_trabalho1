@@ -1,3 +1,5 @@
 *.csv
 *.bin
+*.ppm
+log
 .vscode
