@@ -15,7 +15,7 @@
 
 #pragma GCC optimize("O3")										  //Optimization flags
 #pragma GCC option("arch=native", "tune=native", "no-zero-upper") //Enable AVX
-#pragma GCC target("avx2")										  //Enable AVX
+#pragma GCC target("avx")										  //Enable AVX
 #include <x86intrin.h>											  //AVX/SSE Extensions
 #include <stdio.h>
 #include <stdlib.h>
