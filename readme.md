@@ -12,7 +12,9 @@ No makefile do projeto pode-se observar os comandos de compilação para cada um
 O Shell Script run.sh executa os mesmos testes, visando testar o escalonamento de trablaho de cada um dos códigos. Para excutá-lo: 
 >sh run.sh
 
-Exemplo de a execução dos binários: ./mandelbrot_omp 30000 ~/log.csv 
+Exemplo de a execução dos binários: 
+>./mandelbrot_omp 30000 ~/log.csv 
+
 - ./mandelbrot_omp: binário
 - 30000: tamanho da imagem quadrada gerada
 - ~/log.csv: diretório do log para guardar o tempo de execução do bloco correspondente ao cálculo do mandelbrot
