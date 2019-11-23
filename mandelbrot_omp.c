@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 	exec_time = (double)(exec_t2.tv_usec - exec_t1.tv_usec) / 1000000 + (double)(exec_t2.tv_sec - exec_t1.tv_sec);
 	end = clock();
 	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-	fprintf(log, "%s,%d,%f,%f\n", CODIGO, iYmax, cpu_time_used, exec_time);
+	fprintf(log, "%s_%d,%d,%f,%f\n", CODIGO, nThreads, iYmax, cpu_time_used, exec_time);
 	fclose(log);
 
 	/*//create new file,give it a name and open it in binary mode
