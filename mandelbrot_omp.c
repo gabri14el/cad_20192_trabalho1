@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
 	const double ER2 = EscapeRadius * EscapeRadius;
 
 	omp_set_num_threads(nThreads);
+	omp_set_dynamic(0);
 	start = clock();
 	gettimeofday(&exec_t1, NULL);
 #pragma omp parallel for shared(CyVec, CxVec) private(iY, iX) schedule(dynamic)
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
 	exec_time = (double)(exec_t2.tv_usec - exec_t1.tv_usec) / 1000000 + (double)(exec_t2.tv_sec - exec_t1.tv_sec);
 	end = clock();
 	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-	fprintf(log, "%s_%d,%d,%f,%f\n", CODIGO, nThreads, iYmax, cpu_time_used, exec_time);
+	fprintf(log, "%s,%d,%f,%f,%d\n", CODIGO, iYmax, cpu_time_used, exec_time, nThreads);
 	fclose(log);
 
 	/*//create new file,give it a name and open it in binary mode
