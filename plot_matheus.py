@@ -8,9 +8,9 @@ Created on Sat Nov 23 12:43:42 2019
 import pandas as pd 
 import numpy as np 
 import matplotlib.pyplot as plt
-path = '~/log_m.csv'
+path = 'log.csv'
 df = pd.read_csv(path)
-sufix = '/home/gabriel/matheus_'
+sufix = ''
 
 omp = df[df['algoritmo'] == 'omp_12']
 serial = df[df['algoritmo'] == 'serial']
@@ -57,7 +57,7 @@ ax.legend()
 plt.title('Tempo de CPU')
 plt.xlabel('Trabalho')
 plt.ylabel('Tempo (s)')
-fig.savefig(sufix+'tcpu.jpg', dpi=400)
+fig.savefig(sufix+'tcpu.png', dpi=400)
 
 fig = plt.figure()
 ax = plt.subplot(111)
@@ -70,7 +70,7 @@ plt.title('Tempo de Execução')
 plt.xlabel('Trabalho')
 plt.ylabel('Tempo (s)')
  
-fig.savefig(sufix+'texec.jpg', dpi=400)
+fig.savefig(sufix+'texec.png', dpi=400)
 
 #########################
 
@@ -84,10 +84,10 @@ ax = plt.subplot(111)
 for i in range(12):
     ax.plot(x, omps[i]['twall'].values, label='omp_'+str(i+1))
 ax.legend()
-plt.title('Tempo de Execução (openmp dinâmico)')
+plt.title('Tempo de Execução (openmp estático)')
 plt.xlabel('Trabalho')
 plt.ylabel('Tempo (s)')
-exe.savefig(sufix+'texec_ompe.jpg', dpi=400)
+exe.savefig(sufix+'texec_ompe.png', dpi=400)
 
 acl = plt.figure(figsize=(10,5))
 ax = plt.subplot(111)
@@ -95,10 +95,10 @@ ax = plt.subplot(111)
 for i in range(12):
     ax.plot(omps[i]['trabalho'].values, omps[i]['speed'].values, label='omp_'+str(i+1))
 ax.legend()
-plt.title('Aceleração (openmp dinâmico)')
+plt.title('Aceleração (openmp estático)')
 plt.xlabel('Trabalho')
 plt.ylabel('Aceleração')
-exe.savefig(sufix+'texec_ompe.jpg', dpi=400)
+exe.savefig(sufix+'texec_ompe.png', dpi=400)
 
 efc = plt.figure(figsize=(10,5))
 ax = plt.subplot(111)
@@ -106,41 +106,21 @@ ax = plt.subplot(111)
 for i in range(12):
     ax.plot(omps[i]['trabalho'].values, omps[i]['efficiency'].values, label='omp_'+str(i+1))
 ax.legend()
-plt.title('Eficiência (openmp dinâmico)')
+plt.title('Eficiência (openmp estático)')
 plt.xlabel('Trabalho')
 plt.ylabel('Eficiência')
-efc.savefig('/home/gabriel/efic_ompe.jpg', dpi=400)
+efc.savefig(sufix+'efic_ompe.png', dpi=400)
 
 cpu = plt.figure(figsize=(10,15))
 ax = plt.subplot(111)
 for i in range(12):
     ax.plot(x, omps[i]['tcpu'].values, label='omp_'+str(i+1))
 ax.legend()
-plt.title('Tempo de CPU (openmp dinâmico)')
+plt.title('Tempo de CPU (openmp estático)')
 plt.xlabel('Trabalho')
 plt.ylabel('Tempo (s)')
-exe.savefig(sufix+'tcpu_ompe.jpg', dpi=400)
+cpu.savefig(sufix+'tcpu_ompe.png', dpi=400)
 
-omp6 = df_omp[df_omp['trabalho'] == 60000]
-fig = plt.figure()
-ax = plt.subplot(111)
-x2 = omp6['threads'].values
-ax.plot(x2, omp6['efficiency'].values, label='60000')
-plt.xticks(x2)
-plt.title('Eficiência com maior carga de trabalho (openmp dinâmico)')
-plt.xlabel('Threads')
-plt.ylabel('Eficiência')
-fig.savefig(sufix+'efic_ompe_6000.jpg', dpi=400)
-
-fig = plt.figure()
-ax = plt.subplot(111)
-x2 = omp6['threads'].values
-ax.plot(x2, omp6['speed'].values, label='60000')
-plt.xticks(x2)
-plt.title('Aceleração com maior carga de trabalho (openmp dinâmico)')
-plt.xlabel('Threads')
-plt.ylabel('Aceleração')
-fig.savefig(sufix+'acel_ompe_6000.jpg', dpi=400)
 
 
 
