@@ -8,7 +8,8 @@ Created on Sat Nov 23 12:43:42 2019
 import pandas as pd 
 import numpy as np 
 import matplotlib.pyplot as plt
-path = 'log.csv'
+
+path = '/home/gabriel/log_omp3.csv'
 df = pd.read_csv(path)
 sufix = ''
 
@@ -122,7 +123,26 @@ plt.ylabel('Tempo (s)')
 cpu.savefig(sufix+'tcpu_ompe.png', dpi=400)
 
 
+omp6 = df_omp[df_omp['trabalho'] == 60000]
+x = omp6['threads'].values
+fig = plt.figure()
+ax = plt.subplot(111)
+ax.plot(x, omp6['speed'].values, label='60000')
+plt.xticks(x)
+plt.title('Aceleração com maior carga de trabalho (openmp estático)')
+plt.xlabel('Threads')
+plt.ylabel('Acerelação')
+fig.savefig('/home/gabriel/acel_ompe_6000.jpg', dpi=400)
 
+
+fig = plt.figure()
+ax = plt.subplot(111)
+ax.plot(x, omp6['efficiency'].values, label='60000')
+plt.xticks(x)
+plt.title('Eficiência com maior carga de trabalho (openmp estático)')
+plt.xlabel('Threads')
+plt.ylabel('Eficiência')
+fig.savefig('/home/gabriel/efic_ompe_6000.jpg', dpi=400)
 
     
 
